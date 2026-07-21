@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using StambhaX.Api.Data;
 using StambhaX.Api.DTOs;
 using StambhaX.Api.Models;
+using AutoMapper;
 
 namespace StambhaX.Api.Controllers;
 
@@ -13,10 +14,12 @@ namespace StambhaX.Api.Controllers;
 public class RolesController : ControllerBase
 {
     private readonly AppDbContext _context;
+    private readonly IMapper _mapper;
 
-    public RolesController(AppDbContext context)
+    public RolesController(AppDbContext context, IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -24,10 +27,11 @@ public class RolesController : ControllerBase
     {
         var roles = await _context.Roles
             .Where(r => !r.IsDeleted)
-            .Select(r => new RoleDto(r.Id, r.Name, r.Description))
             .ToListAsync();
 
-        return Ok(roles);
+        var roleDtos = _mapper.Map<List<RoleDto>>(roles);
+
+        return Ok(roleDtos);
     }
 
     [HttpPost]
@@ -40,6 +44,8 @@ public class RolesController : ControllerBase
         _context.Roles.Add(role);
         await _context.SaveChangesAsync();
 
-        return CreatedAtAction(nameof(GetRoles), new { id = role.Id }, new RoleDto(role.Id, role.Name, role.Description));
+        var roleDto = _mapper.Map<RoleDto>(role);
+
+        return CreatedAtAction(nameof(GetRoles), new { id = role.Id }, roleDto);
     }
 }

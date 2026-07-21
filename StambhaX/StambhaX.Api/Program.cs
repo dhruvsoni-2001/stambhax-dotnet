@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using StambhaX.Api.Data;
 using StambhaX.Api.Services;
+using StambhaX.Api.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -50,6 +51,15 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 
+// Register AutoMapper
+builder.Services.AddAutoMapper(cfg => {
+    cfg.AddProfile<StambhaX.Api.Mapper.Mapper>();
+});
+
+// Register Global Exception Handler
+builder.Services.AddExceptionHandler<ExceptionHandlerMiddleware>();
+builder.Services.AddProblemDetails();
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddSwaggerGen();
@@ -84,6 +94,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+// Use Global Exception Handler
+app.UseExceptionHandler();
 
 app.UseHttpsRedirection();
 

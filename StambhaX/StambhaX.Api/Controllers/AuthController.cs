@@ -4,6 +4,7 @@ using Isopoh.Cryptography.Argon2;
 using StambhaX.Api.Data;
 using StambhaX.Api.DTOs;
 using StambhaX.Api.Services;
+using AutoMapper;
 
 namespace StambhaX.Api.Controllers;
 
@@ -13,11 +14,13 @@ public class AuthController : ControllerBase
 {
     private readonly AppDbContext _context;
     private readonly JwtService _jwtService;
+    private readonly IMapper _mapper;
 
-    public AuthController(AppDbContext context, JwtService jwtService)
+    public AuthController(AppDbContext context, JwtService jwtService, IMapper mapper)
     {
         _context = context;
         _jwtService = jwtService;
+        _mapper = mapper;
     }
 
     [HttpPost("login")]
@@ -47,7 +50,7 @@ public class AuthController : ControllerBase
         };
         Response.Cookies.Append("X-Access-Token", token, cookieOptions);
 
-        var userDto = new UserDto(user.Id, user.Username, user.Email, user.IsActive, user.TwoFactorEnabled, roles, user.CreatedAt);
+        var userDto = _mapper.Map<UserDto>(user);
 
         return Ok(new AuthResponseDto(token, userDto));
     }

@@ -5,6 +5,7 @@ using Isopoh.Cryptography.Argon2;
 using StambhaX.Api.Data;
 using StambhaX.Api.DTOs;
 using StambhaX.Api.Models;
+using AutoMapper;
 
 namespace StambhaX.Api.Controllers;
 
@@ -14,10 +15,12 @@ namespace StambhaX.Api.Controllers;
 public class UsersController : ControllerBase
 {
     private readonly AppDbContext _context;
+    private readonly IMapper _mapper;
 
-    public UsersController(AppDbContext context)
+    public UsersController(AppDbContext context, IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -28,12 +31,11 @@ public class UsersController : ControllerBase
             .Include(u => u.UserRoles)
             .ThenInclude(ur => ur.Role)
             .Where(u => !u.IsDeleted)
-            .Select(u => new UserDto(
-                u.Id, u.Username, u.Email, u.IsActive, u.TwoFactorEnabled,
-                u.UserRoles.Select(ur => ur.Role!.Name).ToList(), u.CreatedAt))
             .ToListAsync();
 
-        return Ok(users);
+        var userDtos = _mapper.Map<List<UserDto>>(users);
+
+        return Ok(userDtos);
     }
 
     [HttpPost]
@@ -60,8 +62,7 @@ public class UsersController : ControllerBase
         _context.Users.Add(user);
         await _context.SaveChangesAsync();
 
-        var roles = user.UserRoles.Select(ur => userRole?.Name ?? "").Where(n => !string.IsNullOrEmpty(n)).ToList();
-        var userDto = new UserDto(user.Id, user.Username, user.Email, user.IsActive, user.TwoFactorEnabled, roles, user.CreatedAt);
+        var userDto = _mapper.Map<UserDto>(user);
 
         return CreatedAtAction(nameof(GetUsers), new { id = user.Id }, userDto);
     }
