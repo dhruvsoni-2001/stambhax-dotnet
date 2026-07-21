@@ -1,0 +1,20 @@
+# StambhaX Dual License Agreement
+
+StambhaX is dual-licensed under the **GNU General Public License v3.0 (GPLv3)** and a **Commercial License**.
+
+## 1. Open Source License (GPLv3)
+If you are creating an open-source application under a license compatible with the GNU GPL license v3, you may use StambhaX under the terms of the GPLv3. 
+
+**Important:** Under the GPLv3 license, any modifications, derived works, or commercial applications built on top of this boilerplate MUST also be made completely open-source and distributed under the GPLv3. 
+
+Read the full text of the GPLv3 license here: https://www.gnu.org/licenses/gpl-3.0.txt
+
+## 2. Commercial License
+If you wish to use StambhaX to create proprietary, closed-source, or commercial applications without releasing your own source code, you **MUST** purchase a Commercial License. 
+
+A Commercial License completely frees you from the requirements of the GPLv3 license. It allows you to:
+- Keep your application's source code private.
+- Sell your software without distributing the source code.
+- Retain full proprietary ownership of your intellectual property.
+
+For commercial licensing inquiries and pricing, please contact: [dhruvsoni15175@gmail.com / https://dhruvsoni-ten.vercel.app/]
