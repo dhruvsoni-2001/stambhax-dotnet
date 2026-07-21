@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using StambhaX.Api.Models;
+using Isopoh.Cryptography.Argon2;
 
 namespace StambhaX.Api.Data;
 
@@ -25,8 +26,7 @@ public static class DatabaseSeeder
                 Id = Guid.NewGuid(),
                 Username = "admin",
                 Email = "admin@stambhax.local",
-                // We will hash this properly when we do JWT/Auth!
-                PasswordHash = "DummyHash123", 
+                PasswordHash = Argon2.Hash("AdminPassword123!"), 
                 IsActive = true
             };
 

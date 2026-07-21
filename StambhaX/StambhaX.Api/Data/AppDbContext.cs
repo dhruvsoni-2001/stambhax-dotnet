@@ -7,19 +7,20 @@ public class AppDbContext : DbContext
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
+        I
     }
 
     public DbSet<User> Users { get; set; } = null!;
     public DbSet<Role> Roles { get; set; } = null!;
     public DbSet<UserRole> UserRoles { get; set; } = null!;
-    // Add all your Models here.
-    
+    // Add your other DbSets here
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
-        // Configure many-to-many relationship
+        // Configure many-to-many relationship between User and Role through UserRole
         modelBuilder.Entity<UserRole>()
             .HasKey(ur => new { ur.UserId, ur.RoleId });
 
@@ -32,16 +33,16 @@ public class AppDbContext : DbContext
             .HasOne(ur => ur.Role)
             .WithMany(r => r.UserRoles)
             .HasForeignKey(ur => ur.RoleId);
-            
-        // Make Username and Email unique
+
+        // Username and Email should be unique
         modelBuilder.Entity<User>()
             .HasIndex(u => u.Email)
             .IsUnique();
-            
+
         modelBuilder.Entity<User>()
             .HasIndex(u => u.Username)
             .IsUnique();
-            
+
         modelBuilder.Entity<Role>()
             .HasIndex(r => r.Name)
             .IsUnique();
