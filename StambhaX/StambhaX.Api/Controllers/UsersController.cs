@@ -2,9 +2,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Isopoh.Cryptography.Argon2;
-using StambhaX.Api.Data;
-using StambhaX.Api.DTOs;
-using StambhaX.Api.Models;
+using StambhaX.Infrastructure.Data;
+using StambhaX.Application.DTOs;
+using StambhaX.Core.Entities;
 using AutoMapper;
 
 namespace StambhaX.Api.Controllers;

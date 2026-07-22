@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using StambhaX.Api.Models;
+using StambhaX.Core.Entities;
 using Isopoh.Cryptography.Argon2;
 
-namespace StambhaX.Api.Data;
+namespace StambhaX.Infrastructure.Data;
 
 public static class DatabaseSeeder
 {

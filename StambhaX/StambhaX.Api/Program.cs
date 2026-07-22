@@ -1,10 +1,13 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using StambhaX.Api.Data;
+using StambhaX.Core.Entities;
+using StambhaX.Infrastructure.Data;
+using StambhaX.Application.Services;
+using StambhaX.Core.Interfaces;
+using StambhaX.Infrastructure.Repositories;
+using StambhaX.Application.Mapper;
 using StambhaX.Api.Middlewares;
-using StambhaX.Api.Repositories;
-using StambhaX.Api.Services;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -55,7 +58,7 @@ builder.Services.AddAuthorization();
 // Register AutoMapper
 builder.Services.AddAutoMapper(cfg =>
 {
-    cfg.AddProfile<StambhaX.Api.Mapper.Mapper>();
+    cfg.AddProfile<StambhaX.Application.Mapper.Mapper>();
 });
 
 // Register Global Exception Handler

@@ -1,4 +1,4 @@
-namespace StambhaX.Api.DTOs;
+namespace StambhaX.Application.DTOs;
 
 public class UserDto
 {

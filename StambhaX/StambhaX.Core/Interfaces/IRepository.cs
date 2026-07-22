@@ -1,6 +1,6 @@
 using System.Linq.Expressions;
 
-namespace StambhaX.Api.Repositories
+namespace StambhaX.Core.Interfaces
 {
     public interface IRepository<T> where T : class
     {

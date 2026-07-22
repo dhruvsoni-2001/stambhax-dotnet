@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using StambhaX.Api.Data;
+using Microsoft.EntityFrameworkCore;
+using StambhaX.Infrastructure.Data;
 using System.Linq.Expressions;
+using StambhaX.Core.Interfaces;
 
-namespace StambhaX.Api.Repositories;
+namespace StambhaX.Infrastructure.Repositories;
 
 public class Repository<T> : IRepository<T> where T : class
 {

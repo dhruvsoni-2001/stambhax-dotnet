@@ -1,8 +1,8 @@
 using AutoMapper;
-using StambhaX.Api.DTOs;
-using StambhaX.Api.Models;
+using StambhaX.Application.DTOs;
+using StambhaX.Core.Entities;
 
-namespace StambhaX.Api.Mapper
+namespace StambhaX.Application.Mapper
 {
     public class Mapper : Profile
     {

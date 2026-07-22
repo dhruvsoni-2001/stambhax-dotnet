@@ -1,11 +1,11 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using StambhaX.Api.Data;
-using StambhaX.Api.DTOs;
-using StambhaX.Api.Models;
+using StambhaX.Infrastructure.Data;
+using StambhaX.Application.DTOs;
+using StambhaX.Core.Entities;
 using AutoMapper;
-using StambhaX.Api.Repositories;
+using StambhaX.Core.Interfaces;
 
 namespace StambhaX.Api.Controllers;
 

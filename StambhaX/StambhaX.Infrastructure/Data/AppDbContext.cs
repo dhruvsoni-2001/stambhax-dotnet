@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using StambhaX.Api.Models;
+using StambhaX.Core.Entities;
 
-namespace StambhaX.Api.Data;
+namespace StambhaX.Infrastructure.Data;
 
 public class AppDbContext : DbContext
 {

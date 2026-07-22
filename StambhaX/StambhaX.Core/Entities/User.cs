@@ -1,4 +1,4 @@
-namespace StambhaX.Api.Models;
+namespace StambhaX.Core.Entities;
 
 public class User : BaseEntity
 {

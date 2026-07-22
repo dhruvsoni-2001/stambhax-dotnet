@@ -2,9 +2,10 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
-using StambhaX.Api.Models;
+using StambhaX.Core.Entities;
+using Microsoft.Extensions.Configuration;
 
-namespace StambhaX.Api.Services;
+namespace StambhaX.Application.Services;
 
 public class JwtService
 {
