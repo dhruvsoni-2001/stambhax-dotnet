@@ -5,6 +5,7 @@ using StambhaX.Api.Data;
 using StambhaX.Api.DTOs;
 using StambhaX.Api.Models;
 using AutoMapper;
+using StambhaX.Api.Repositories;
 
 namespace StambhaX.Api.Controllers;
 
@@ -13,21 +14,20 @@ namespace StambhaX.Api.Controllers;
 [Authorize(Roles = "Admin")]
 public class RolesController : ControllerBase
 {
-    private readonly AppDbContext _context;
+    //private readonly AppDbContext _context;
+    private readonly IRepository<Role> _roleRepository;
     private readonly IMapper _mapper;
 
-    public RolesController(AppDbContext context, IMapper mapper)
+    public RolesController(IRepository<Role> roleRepsitory, IMapper mapper)
     {
-        _context = context;
+        _roleRepository = roleRepsitory;
         _mapper = mapper;
     }
 
     [HttpGet]
     public async Task<IActionResult> GetRoles()
     {
-        var roles = await _context.Roles
-            .Where(r => !r.IsDeleted)
-            .ToListAsync();
+        var roles = await _roleRepository.FindAsync(r => !r.IsDeleted);
 
         var roleDtos = _mapper.Map<List<RoleDto>>(roles);
 
@@ -37,15 +37,16 @@ public class RolesController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateRole([FromBody] CreateRoleDto request)
     {
-        if (await _context.Roles.AnyAsync(r => r.Name == request.Name))
-            return BadRequest("Role already exists.");
-
-        var role = new Role { Name = request.Name, Description = request.Description };
-        _context.Roles.Add(role);
-        await _context.SaveChangesAsync();
-
+        if (await _roleRepository.FindAsync(r => r.Name == request.Name && !r.IsDeleted) is { } existingRoles && existingRoles.Any())
+            return BadRequest("Role name already exists.");
+        var role = new Role
+        {
+            Name = request.Name,
+            Description = request.Description
+        };
+        await _roleRepository.AddAsync(role);
+        await _roleRepository.SaveChangesAsync();
         var roleDto = _mapper.Map<RoleDto>(role);
-
         return CreatedAtAction(nameof(GetRoles), new { id = role.Id }, roleDto);
     }
 }

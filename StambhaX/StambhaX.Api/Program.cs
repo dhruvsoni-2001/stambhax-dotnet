@@ -1,10 +1,11 @@
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using StambhaX.Api.Data;
-using StambhaX.Api.Services;
 using StambhaX.Api.Middlewares;
+using StambhaX.Api.Repositories;
+using StambhaX.Api.Services;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,7 +24,7 @@ builder.Services.AddAuthentication(options =>
 })
 .AddJwtBearer(options =>
 {
-    options.RequireHttpsMetadata = false; 
+    options.RequireHttpsMetadata = false;
     options.SaveToken = true;
     options.TokenValidationParameters = new TokenValidationParameters
     {
@@ -35,7 +36,7 @@ builder.Services.AddAuthentication(options =>
         ValidAudience = jwtSettings["Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey!))
     };
-    
+
     options.Events = new JwtBearerEvents
     {
         OnMessageReceived = context =>
@@ -52,7 +53,8 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthorization();
 
 // Register AutoMapper
-builder.Services.AddAutoMapper(cfg => {
+builder.Services.AddAutoMapper(cfg =>
+{
     cfg.AddProfile<StambhaX.Api.Mapper.Mapper>();
 });
 
@@ -60,18 +62,22 @@ builder.Services.AddAutoMapper(cfg => {
 builder.Services.AddExceptionHandler<ExceptionHandlerMiddleware>();
 builder.Services.AddProblemDetails();
 
+// Register Repositories
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddSwaggerGen();
+
 
 // Configure Entity Framework Core with PostgreSQL as default
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresConnection"));
-    
+
     // To switch to SQL Server, uncomment the line below and comment out UseNpgsql:
     // options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServerConnection"));
-    
+
     // To switch to SQLite, uncomment the line below and comment out UseNpgsql:
     // options.UseSqlite(builder.Configuration.GetConnectionString("SqliteConnection"));
 });
@@ -83,7 +89,7 @@ using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     // This automatically runs pending migrations!
-    context.Database.Migrate(); 
+    context.Database.Migrate();
     // This seeds our dummy data
     await DatabaseSeeder.SeedAsync(context);
 }
